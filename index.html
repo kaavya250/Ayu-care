@@ -1,267 +1,1034 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AyuCare - Ayurveda & Yoga Wellness</title>
-<style>
-:root {
-  --primary: #1a4731;
-  --secondary: #f5f0e6;
-  --accent: #94c973;
-  --gold: #d4af37;
-  --text-dark: #1f2937;
-  --text-light: #f9fafb;
-  --card-bg: rgba(255, 255, 255, 0.92);
-  --transition: all 0.4s ease;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#173f2d" />
+  <meta name="description" content="AyuCare — an Ayurveda and yoga wellness information library with a searchable, data-connected assistant." />
+  <title>AyuCare | Ayurveda, Yoga & Everyday Wellness</title>
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <style>
+    :root {
+      --forest: #173f2d;
+      --forest-2: #245b3e;
+      --leaf: #91bd70;
+      --leaf-light: #dcebd0;
+      --gold: #c8a64b;
+      --cream: #f7f5ed;
+      --paper: #fffefa;
+      --ink: #20342a;
+      --muted: #68756c;
+      --line: rgba(23, 63, 45, .13);
+      --shadow: 0 18px 55px rgba(20, 49, 34, .11);
+      --radius: 24px;
+      --transition: 220ms ease;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 17%, rgba(145,189,112,.12), transparent 24rem),
+        radial-gradient(circle at 95% 48%, rgba(200,166,75,.10), transparent 25rem),
+        var(--cream);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    .skip-link { position: absolute; left: -999px; top: 8px; z-index: 2000; background: white; padding: 10px 14px; border-radius: 10px; }
+    .skip-link:focus { left: 10px; }
 
-body {
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  color:var(--text-dark);
-  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1610622141526-3b7b77e9e2e8?auto=format&fit=crop&w=1600&q=80');
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  scroll-behavior: smooth;
-  transition: background 0.5s ease;
-}
+    .site-header {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      padding: 13px max(5vw, calc((100vw - 1240px)/2));
+      background: rgba(255,254,250,.88); backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(23,63,45,.11);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; min-width: max-content; }
+    .brand-mark { width: 42px; height: 42px; display:grid; place-items:center; border-radius: 15px; color:#fff; font-size: 22px; background: linear-gradient(145deg,var(--forest-2),var(--forest)); box-shadow: 0 7px 18px rgba(23,63,45,.2); }
+    .brand-name { font-family: Georgia, serif; font-size: 1.55rem; font-weight: 700; letter-spacing: -.04em; color: var(--forest); line-height:1; }
+    .brand-tag { display:block; color:var(--muted); font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; margin-top:5px; }
+    .nav-links { display:flex; align-items:center; gap: clamp(12px,2vw,28px); }
+    .nav-links a { color:#42564a; text-decoration:none; font-size:.91rem; font-weight:650; transition: color var(--transition); }
+    .nav-links a:hover { color:var(--forest-2); }
+    .nav-cta, .primary-btn { border:0; color:white !important; text-decoration:none; border-radius:999px; background:var(--forest); padding:11px 18px; font-weight:700; box-shadow:0 8px 18px rgba(23,63,45,.15); transition:transform var(--transition),background var(--transition); }
+    .nav-cta:hover, .primary-btn:hover { background:var(--forest-2); transform:translateY(-2px); }
+    .menu-toggle { display:none; border:1px solid var(--line); background:white; color:var(--forest); border-radius:12px; padding:8px 11px; }
 
-header {
-  backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.7);
-  padding:20px 10%;
-  position: sticky;
-  top:0;
-  z-index:1000;
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  border-bottom:2px solid var(--accent);
-}
+    .hero-wrap { padding: 28px 5vw 20px; }
+    .hero {
+      position:relative; overflow:hidden; max-width:1440px; min-height:540px; margin:0 auto;
+      display:grid; grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr); align-items:center;
+      border-radius:32px; color:#fff; box-shadow:var(--shadow);
+      background-image: linear-gradient(90deg,rgba(9,37,25,.90) 0%,rgba(13,49,31,.78) 48%,rgba(13,49,31,.18) 100%), url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=2000&q=85');
+      background-size:cover; background-position:center;
+    }
+    .hero::after { content:""; position:absolute; inset:auto -100px -190px auto; width:470px; height:470px; border:1px solid rgba(255,255,255,.2); border-radius:50%; box-shadow:0 0 0 38px rgba(255,255,255,.035),0 0 0 78px rgba(255,255,255,.025); pointer-events:none; }
+    .hero-copy { position:relative; z-index:1; padding: clamp(34px,6vw,82px); max-width:760px; }
+    .eyebrow { display:inline-flex; align-items:center; gap:9px; color:#e6efdb; font-size:.76rem; text-transform:uppercase; letter-spacing:.16em; font-weight:800; }
+    .eyebrow::before { content:""; width:26px; height:1px; background:var(--gold); }
+    .hero h1 { margin:20px 0 16px; max-width:670px; font:700 clamp(2.7rem,6vw,5.2rem)/.99 Georgia,serif; letter-spacing:-.045em; }
+    .hero h1 em { color:#d4e8bd; font-weight:500; }
+    .hero-copy > p { max-width:600px; margin:0; color:rgba(255,255,255,.86); font-size:clamp(1rem,1.5vw,1.16rem); }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+    .hero .primary-btn { background:var(--gold); color:#183c2a !important; box-shadow:none; }
+    .secondary-btn { display:inline-flex; align-items:center; gap:8px; color:white; text-decoration:none; padding:10px 16px; border:1px solid rgba(255,255,255,.4); border-radius:999px; font-weight:700; transition:background var(--transition); }
+    .secondary-btn:hover { background:rgba(255,255,255,.12); }
+    .hero-note { margin-top:24px; color:rgba(255,255,255,.72); font-size:.79rem; }
+    .hero-aside { position:relative; z-index:1; align-self:end; justify-self:end; width:min(360px,85%); margin:0 clamp(25px,5vw,70px) 48px 0; padding:21px; background:rgba(255,254,250,.91); color:var(--ink); border:1px solid rgba(255,255,255,.55); border-radius:22px; box-shadow:0 18px 50px rgba(0,0,0,.16); backdrop-filter:blur(12px); }
+    .hero-aside img { display:block; width:100%; height:135px; object-fit:cover; border-radius:14px; }
+    .hero-aside small { display:block; margin-top:14px; color:var(--forest-2); font-weight:800; letter-spacing:.12em; text-transform:uppercase; font-size:.66rem; }
+    .hero-aside strong { display:block; margin-top:5px; font:700 1.25rem Georgia,serif; }
+    .hero-aside p { color:var(--muted); font-size:.86rem; margin:5px 0 0; }
 
-header h1 { color: var(--primary); font-size:1.8rem; font-weight:bold;}
-nav a { color: var(--text-dark); text-decoration:none; margin:0 15px; font-weight:500; transition:var(--transition);}
-nav a:hover { color: var(--accent); }
+    .stats-bar { max-width:1120px; margin:-2px auto 0; padding:20px 5vw; display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
+    .stat { display:flex; justify-content:center; align-items:center; gap:13px; padding:8px 10px; }
+    .stat-icon { width:42px; height:42px; display:grid; place-items:center; background:#e5efdc; color:var(--forest); border-radius:14px; font-size:1.2rem; }
+    .stat strong { display:block; color:var(--forest); font-size:1.22rem; line-height:1.15; }
+    .stat span:last-child { color:var(--muted); font-size:.76rem; }
 
-main { text-align:center; padding:80px 10%; }
+    .section { max-width:1240px; margin:0 auto; padding:76px 5vw; }
+    .section-heading { display:flex; align-items:end; justify-content:space-between; gap:22px; margin-bottom:28px; }
+    .section-heading .overline { color:var(--forest-2); text-transform:uppercase; letter-spacing:.15em; font-size:.72rem; font-weight:850; }
+    .section-heading h2 { margin:7px 0 0; color:var(--forest); font:700 clamp(2rem,4vw,3rem)/1.05 Georgia,serif; letter-spacing:-.035em; }
+    .section-heading p { max-width:500px; margin:0; color:var(--muted); font-size:.94rem; }
 
-.hero { color: var(--text-light); padding:80px 10%; background: rgba(26,71,49,0.8); border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.3); animation:fadeIn 1.2s ease;}
-.hero h2 { font-size:2.8rem; margin-bottom:10px; color: var(--gold);}
-.hero p { font-size:1.2rem; color:#e0e0e0; }
+    .search-panel { position:relative; display:flex; align-items:center; gap:10px; width:min(100%,760px); margin:0 auto 28px; padding:9px 10px 9px 19px; background:white; border:1px solid var(--line); border-radius:999px; box-shadow:0 12px 35px rgba(23,63,45,.08); }
+    .search-icon { color:var(--forest-2); font-size:1.2rem; }
+    .search-panel input { flex:1; min-width:0; border:0; outline:none; background:transparent; color:var(--ink); padding:10px 4px; }
+    .search-panel input::placeholder { color:#8a958c; }
+    .search-panel button { border:0; border-radius:999px; color:#fff; background:var(--forest); padding:11px 20px; font-weight:750; }
+    .search-results { display:grid; gap:9px; width:min(100%,760px); margin:-15px auto 24px; }
+    .search-result { display:flex; justify-content:space-between; align-items:center; gap:15px; border:1px solid var(--line); background:var(--paper); border-radius:14px; padding:13px 16px; text-align:left; color:var(--ink); }
+    .search-result:hover { border-color:var(--leaf); background:#f8fbf4; }
+    .search-result strong { color:var(--forest); display:block; }
+    .search-result small { color:var(--muted); }
+    .search-empty { padding:14px; color:var(--muted); text-align:center; }
 
-section { background: var(--card-bg); margin:50px auto; padding:50px 30px; border-radius:16px; max-width:1200px; box-shadow:0 10px 25px rgba(0,0,0,0.15); animation: fadeUp 1s ease; transition: var(--transition);}
-section:hover { transform: translateY(-5px); }
-.section-title { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
+    .library-section { position:relative; max-width:none; background:rgba(255,254,250,.78); border-top:1px solid rgba(23,63,45,.06); border-bottom:1px solid rgba(23,63,45,.06); }
+    .library-inner { max-width:1240px; margin:0 auto; padding:76px 5vw; }
+    .toolbar { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; }
+    .filter-btn { border:1px solid var(--line); color:#526358; background:white; border-radius:99px; padding:8px 13px; font-size:.82rem; font-weight:700; }
+    .filter-btn.active, .filter-btn:hover { color:white; background:var(--forest); border-color:var(--forest); }
+    .library-count { color:var(--muted); font-size:.83rem; }
+    .library-examples-control { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:0 0 18px; padding:15px 17px; border:1px solid var(--line); border-radius:16px; background:#fffefa; }
+    .library-examples-copy { display:grid; gap:3px; min-width:0; }
+    .library-examples-copy strong { color:var(--forest); font-size:.9rem; }
+    .library-examples-copy span { color:var(--muted); font-size:.78rem; }
+    .library-toggle-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; flex:0 0 auto; min-height:42px; padding:9px 16px; border:1px solid var(--forest); border-radius:999px; background:var(--forest); color:white; font-size:.82rem; font-weight:800; transition:background var(--transition), transform var(--transition); }
+    .library-toggle-btn:hover { background:var(--forest-2); transform:translateY(-1px); }
+    .library-toggle-btn[aria-expanded="true"] { color:var(--forest); background:#eaf2e2; border-color:var(--leaf); }
+    .library-toggle-icon { display:inline-grid; place-items:center; width:18px; height:18px; font-size:1.1rem; line-height:1; }
+    .disease-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:15px; }
+    .disease-grid[hidden] { display:none !important; }
+    .disease-card { min-height:178px; border:1px solid rgba(23,63,45,.10); border-radius:18px; padding:20px; text-align:left; background:white; box-shadow:0 8px 23px rgba(23,63,45,.045); transition:transform var(--transition),box-shadow var(--transition),border-color var(--transition); }
+    .disease-card:hover { transform:translateY(-4px); border-color:rgba(145,189,112,.7); box-shadow:0 14px 30px rgba(23,63,45,.10); }
+    .card-topline { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .card-symbol { width:37px; height:37px; display:grid; place-items:center; border-radius:12px; background:#eff5e9; font-size:1.1rem; }
+    .card-arrow { color:var(--gold); font-size:1.1rem; }
+    .disease-card h3 { margin:15px 0 3px; color:var(--forest); font:700 1.14rem Georgia,serif; }
+    .disease-card .hindi { color:#7b887e; font-size:.78rem; }
+    .disease-card p { margin:9px 0 0; color:var(--muted); font-size:.82rem; line-height:1.45; }
+    .empty-state { grid-column:1/-1; padding:35px; border:1px dashed var(--line); border-radius:18px; text-align:center; color:var(--muted); }
 
-.card-container { display:flex; flex-wrap:nowrap; overflow:hidden; gap:25px; padding-bottom:10px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
-.card { min-width:220px; flex:0 0 auto; border-radius:16px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1); transition:var(--transition); padding:20px; cursor:pointer;}
-.card:hover { transform: translateY(-8px) scale(1.03); box-shadow:0 8px 24px rgba(0,0,0,0.2);}
-.card-content h3 { color: var(--primary); margin-bottom:8px;} 
-.card-content p { font-size:0.95rem; color:#555; }
+    .feature-band { max-width:1240px; margin:76px auto; padding:0 5vw; }
+    .feature-inner { display:grid; grid-template-columns:1fr 1fr; overflow:hidden; background:var(--forest); color:white; border-radius:28px; box-shadow:var(--shadow); }
+    .feature-photo { min-height:330px; background:url('https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=1100&q=85') center/cover; }
+    .feature-copy { padding:clamp(30px,5vw,58px); align-self:center; }
+    .feature-copy .overline { color:#cce1b8; text-transform:uppercase; letter-spacing:.15em; font-size:.72rem; font-weight:800; }
+    .feature-copy h2 { margin:12px 0; font:700 clamp(2rem,4vw,2.8rem)/1.05 Georgia,serif; }
+    .feature-copy p { color:rgba(255,255,255,.78); max-width:510px; }
+    .feature-copy a { display:inline-flex; margin-top:10px; color:#173f2d; background:#d5e8c3; padding:10px 16px; border-radius:99px; text-decoration:none; font-weight:800; }
 
-#search-bar { margin-top:40px; padding:12px; border-radius:25px; border:2px solid var(--accent); width:60%; max-width:500px; transition:var(--transition); font-size:1rem;}
-#search-bar:focus { outline:none; box-shadow:0 0 10px var(--accent); }
-#suggestions { margin-top:10px; text-align:center; position:relative; z-index:10; }
-.suggestion { background: var(--card-bg); color: var(--accent); display: block; padding: 10px 15px; border-radius: 12px; margin: 5px auto; width: fit-content; cursor: pointer; font-weight: 500; box-shadow:0 4px 12px rgba(0,0,0,0.2); transition: var(--transition);}
-.suggestion:hover { background: var(--accent); color: var(--text-light); }
+    .yoga-area { display:grid; grid-template-columns:.75fr 1.25fr; gap:36px; align-items:start; }
+    .yoga-intro { position:relative; overflow:hidden; min-height:350px; padding:30px; border-radius:24px; color:white; background:linear-gradient(180deg,rgba(15,48,32,.18),rgba(15,48,32,.9)),url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1000&q=85') center/cover; }
+    .yoga-intro h3 { position:absolute; left:30px; right:28px; bottom:58px; margin:0; font:700 2rem/1.04 Georgia,serif; }
+    .yoga-intro p { position:absolute; left:30px; right:28px; bottom:22px; margin:0; color:rgba(255,255,255,.8); font-size:.86rem; }
+    .yoga-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .yoga-chip { display:flex; align-items:flex-start; gap:12px; min-height:95px; padding:16px; border:1px solid var(--line); border-radius:17px; background:white; }
+    .yoga-chip span { width:33px; height:33px; flex:0 0 33px; display:grid; place-items:center; background:#edf4e7; border-radius:11px; }
+    .yoga-chip strong { display:block; color:var(--forest); font:700 1rem Georgia,serif; }
+    .yoga-chip small { display:block; color:var(--muted); margin-top:4px; font-size:.75rem; line-height:1.4; }
 
-#detailSection { display:none; margin:20px auto; padding:20px; border-radius:16px; background: var(--card-bg); max-width:1200px; box-shadow:0 10px 25px rgba(0,0,0,0.15); text-align:left; color: var(--primary);}
-#detailSection h2, #detailSection h3, #detailSection p, #detailSection li { color: var(--primary); }
+    .chat-section { position:relative; overflow:hidden; background:linear-gradient(120deg,rgba(226,238,216,.72),rgba(247,245,237,.94)),url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1800&q=70') center/cover; }
+    .chat-layout { display:grid; grid-template-columns:.8fr 1.2fr; gap:44px; align-items:center; }
+    .chat-copy h2 { margin:8px 0 15px; color:var(--forest); font:700 clamp(2.2rem,4vw,3.3rem)/1.02 Georgia,serif; letter-spacing:-.035em; }
+    .chat-copy p { color:#5c6c60; }
+    .chat-points { display:grid; gap:11px; margin-top:23px; }
+    .chat-points div { display:flex; gap:10px; color:#435a49; font-size:.88rem; }
+    .chat-points span { color:var(--forest-2); font-weight:900; }
+    .chat-widget { background:rgba(255,254,250,.97); border:1px solid rgba(23,63,45,.14); border-radius:24px; box-shadow:0 22px 60px rgba(23,63,45,.15); overflow:hidden; }
+    .chat-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 20px; color:white; background:var(--forest); }
+    .chat-brand { display:flex; align-items:center; gap:10px; }
+    .chat-avatar { width:38px; height:38px; display:grid; place-items:center; color:var(--forest); background:#dcebcf; border-radius:13px; font-size:1.2rem; }
+    .chat-head strong { display:block; font-size:.94rem; }
+    .chat-head small { display:block; color:rgba(255,255,255,.68); font-size:.72rem; }
+    .online-dot { width:8px; height:8px; display:inline-block; margin-right:5px; border-radius:50%; background:#a8d88c; }
+    .chat-status { color:rgba(255,255,255,.78); font-size:.72rem; }
+    .chat-messages { height:370px; overflow:auto; padding:19px; display:flex; flex-direction:column; gap:13px; background:linear-gradient(rgba(255,254,250,.94),rgba(255,254,250,.97)),url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=70') center/cover; }
+    .message { max-width:88%; padding:12px 14px; border-radius:16px; font-size:.86rem; line-height:1.55; overflow-wrap:anywhere; }
+    .message.bot { align-self:flex-start; border:1px solid rgba(23,63,45,.09); background:white; border-top-left-radius:5px; color:#3a4d40; }
+    .message.user { align-self:flex-end; background:#e5efd9; color:#234331; border-top-right-radius:5px; }
+    .message p { margin:0 0 8px; }
+    .message p:last-child { margin-bottom:0; }
+    .message ul { margin:7px 0 0; padding-left:19px; }
+    .message li { margin:3px 0; }
+    .message .message-title { display:block; color:var(--forest); font-weight:850; margin-bottom:4px; }
+    .message .caution { display:block; margin-top:10px; padding-top:8px; border-top:1px solid var(--line); color:#7b5d24; font-size:.76rem; }
+    .message-action { margin-top:10px; border:1px solid var(--leaf); border-radius:99px; padding:7px 11px; background:#f5faef; color:var(--forest); font-size:.75rem; font-weight:800; }
+    .quick-prompts { display:flex; flex-wrap:wrap; gap:7px; padding:0 17px 12px; background:#fffefa; }
+    .quick-prompts button { border:1px solid var(--line); border-radius:99px; background:white; color:#4f6255; padding:7px 10px; font-size:.72rem; font-weight:700; }
+    .quick-prompts button:hover { background:#eff6e8; border-color:var(--leaf); }
+    .chat-form { display:flex; align-items:center; gap:9px; padding:13px 15px; border-top:1px solid var(--line); background:white; }
+    .chat-form input { flex:1; min-width:0; border:1px solid var(--line); border-radius:99px; padding:12px 15px; outline:none; color:var(--ink); background:#fafbf8; }
+    .chat-form input:focus { border-color:var(--leaf); box-shadow:0 0 0 3px rgba(145,189,112,.16); }
+    .send-btn { width:43px; height:43px; flex:0 0 43px; border:0; border-radius:50%; background:var(--forest); color:white; font-size:1.05rem; }
+    .chat-footnote { padding:0 17px 13px; background:white; color:#89948b; font-size:.67rem; }
 
-footer { text-align:center; padding:25px; background: rgba(26,71,49,0.9); color:white; margin-top:50px; border-top:3px solid var(--gold); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:stretch; }
+    .about-card { padding:clamp(25px,4vw,42px); border:1px solid var(--line); border-radius:23px; background:white; }
+    .about-card h3 { margin:0 0 10px; color:var(--forest); font:700 1.7rem Georgia,serif; }
+    .about-card p { margin:0; color:var(--muted); }
+    .about-image { min-height:260px; border-radius:23px; background:linear-gradient(0deg,rgba(19,54,36,.25),rgba(19,54,36,.02)),url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1100&q=85') center/cover; }
 
-.pop-card { background: var(--card-bg); padding: 20px 30px; border-radius: 15px; color: var(--primary); box-shadow: 0 0 15px rgba(0,0,0,0.15); transition: var(--transition); margin: 20px auto; max-width:300px; }
-.pop-card:hover { transform: translateY(-5px); }
+    .reviews-section { background:rgba(255,254,250,.75); border-top:1px solid rgba(23,63,45,.07); }
+    .review-note { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; margin-bottom:20px; border:1px solid rgba(200,166,75,.3); border-radius:14px; background:#fcf8ea; color:#78652f; font-size:.82rem; }
+    .review-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
+    .review-card { padding:22px; border:1px solid var(--line); border-radius:18px; background:white; }
+    .review-card .sample-tag { display:inline-block; padding:4px 8px; border-radius:99px; background:#f1f4ed; color:#657363; font-size:.62rem; text-transform:uppercase; font-weight:850; letter-spacing:.09em; }
+    .review-card p { min-height:55px; margin:14px 0; color:#45574a; font:1rem/1.5 Georgia,serif; }
+    .review-card strong { color:var(--forest); font-size:.83rem; }
+    .review-card small { display:block; color:#859087; font-size:.7rem; margin-top:2px; }
 
-#review-container div { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow:0 0 15px rgba(0,0,0,0.15); margin-bottom:15px; }
+    .safety-banner { max-width:1150px; margin:70px auto; padding:0 5vw; }
+    .safety-inner { display:flex; align-items:flex-start; gap:17px; padding:22px; border:1px solid rgba(173,125,44,.25); border-radius:20px; background:#fff9e9; color:#6e5626; }
+    .safety-inner .icon { font-size:1.5rem; }
+    .safety-inner strong { display:block; margin-bottom:4px; }
+    .safety-inner p { margin:0; font-size:.84rem; }
+    footer { padding:35px 5vw; color:rgba(255,255,255,.78); background:#143a29; }
+    .footer-inner { max-width:1240px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; }
+    footer .brand-name { color:white; }
+    footer .brand-tag { color:rgba(255,255,255,.55); }
+    footer p { margin:0; font-size:.77rem; }
 
-@keyframes fadeUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    .modal-backdrop { position:fixed; inset:0; z-index:1500; display:none; place-items:center; padding:18px; background:rgba(11,31,20,.58); backdrop-filter:blur(5px); }
+    .modal-backdrop.open { display:grid; }
+    .detail-modal { width:min(680px,100%); max-height:min(88vh,850px); overflow:auto; border-radius:25px; background:#fffefa; box-shadow:0 25px 90px rgba(0,0,0,.3); }
+    .modal-header { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding:24px 26px; background:linear-gradient(120deg,#eaf2e2,#fffefa); border-bottom:1px solid var(--line); }
+    .modal-header h2 { margin:0; color:var(--forest); font:700 2rem/1.05 Georgia,serif; }
+    .modal-header p { margin:5px 0 0; color:var(--muted); font-size:.85rem; }
+    .modal-close { flex:0 0 auto; border:0; border-radius:50%; width:35px; height:35px; background:white; color:var(--forest); font-size:1.2rem; }
+    .modal-content { padding:24px 26px 28px; }
+    .modal-content h3 { margin:18px 0 7px; color:var(--forest); font:700 1.12rem Georgia,serif; }
+    .modal-content p, .modal-content li { color:#5e6d62; font-size:.88rem; }
+    .data-warning { padding:13px 14px; margin:16px 0; border-radius:13px; background:#fff7e6; color:#725a2d; font-size:.78rem; }
+    .loader-note { color:var(--muted); font-size:.8rem; }
+    .hidden { display:none !important; }
 
-@media(max-width:768px){ header { flex-direction:column; text-align:center; } nav a { display:block; margin:8px 0; } #search-bar { width:90%; } }
-</style>
+    @media (max-width: 980px) {
+      .nav-links { gap:13px; }
+      .nav-links a { font-size:.82rem; }
+      .disease-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .chat-layout { grid-template-columns:.7fr 1.3fr; gap:25px; }
+      .hero { grid-template-columns:1fr .58fr; }
+      .hero-aside { width:85%; margin-right:25px; }
+    }
+    @media (max-width: 760px) {
+      .library-examples-control { align-items:flex-start; flex-direction:column; }
+      .library-toggle-btn { width:100%; }
+      .site-header { padding:11px 5vw; }
+      .menu-toggle { display:block; }
+      .nav-links { display:none; position:absolute; left:0; right:0; top:67px; padding:17px 5vw 22px; flex-direction:column; align-items:stretch; gap:13px; background:rgba(255,254,250,.98); border-bottom:1px solid var(--line); box-shadow:0 15px 25px rgba(23,63,45,.08); }
+      .nav-links.open { display:flex; }
+      .nav-links a { padding:5px 0; font-size:.95rem; }
+      .nav-cta { text-align:center; }
+      .hero-wrap { padding:15px 3vw 8px; }
+      .hero { min-height:560px; grid-template-columns:1fr; background-position:57% center; }
+      .hero-copy { padding:40px 28px 20px; }
+      .hero-aside { justify-self:start; width:min(320px,calc(100% - 56px)); margin:0 28px 25px; display:grid; grid-template-columns:100px 1fr; gap:12px; align-items:center; }
+      .hero-aside img { height:90px; }
+      .hero-aside small { margin-top:0; }
+      .hero-aside strong { font-size:1.05rem; }
+      .hero-aside p { font-size:.75rem; }
+      .stats-bar { gap:5px; padding:18px 3vw; }
+      .stat { justify-content:flex-start; gap:8px; padding:5px; }
+      .stat-icon { width:34px; height:34px; flex:0 0 34px; font-size:1rem; }
+      .stat strong { font-size:1rem; }
+      .stat span:last-child { font-size:.65rem; }
+      .section, .library-inner { padding:58px 5vw; }
+      .section-heading { display:block; }
+      .section-heading p { margin-top:12px; }
+      .disease-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .feature-inner { grid-template-columns:1fr; }
+      .feature-photo { min-height:220px; }
+      .yoga-area, .chat-layout, .about-grid { grid-template-columns:1fr; }
+      .yoga-intro { min-height:270px; }
+      .chat-copy { max-width:600px; }
+      .review-grid { grid-template-columns:1fr; }
+      .review-card p { min-height:auto; }
+      .safety-banner { margin:48px auto; }
+    }
+    @media (max-width: 430px) {
+      .brand-name { font-size:1.35rem; }
+      .brand-mark { width:38px; height:38px; }
+      .hero h1 { font-size:2.65rem; }
+      .stats-bar { grid-template-columns:1fr; max-width:250px; }
+      .stat { justify-content:flex-start; }
+      .search-panel { border-radius:17px; padding:8px 9px 8px 13px; }
+      .search-panel button { padding:10px 13px; }
+      .disease-grid { gap:9px; }
+      .disease-card { min-height:165px; padding:14px; }
+      .disease-card h3 { font-size:1rem; }
+      .yoga-list { grid-template-columns:1fr; }
+      .chat-messages { height:390px; }
+      .modal-header, .modal-content { padding-left:19px; padding-right:19px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    }
+  
+
+    /* ===== Enhanced botanical visuals, photo backgrounds and motion ===== */
+    body {
+      background:
+        radial-gradient(circle at 8% 17%, rgba(145,189,112,.13), transparent 24rem),
+        radial-gradient(circle at 95% 48%, rgba(200,166,75,.10), transparent 25rem),
+        linear-gradient(rgba(249,248,242,.92),rgba(249,248,242,.92)),
+        url('https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=2000&q=80') center/cover fixed;
+    }
+    .scroll-progress {
+      position:fixed; top:0; left:0; z-index:2001; width:100%; height:3px;
+      background:linear-gradient(90deg,var(--leaf),var(--gold),#e9d9a0);
+      transform:scaleX(0); transform-origin:left center; pointer-events:none;
+      box-shadow:0 1px 8px rgba(23,63,45,.18);
+    }
+    .site-header { box-shadow:0 8px 30px rgba(23,63,45,.045); }
+    .brand-mark { position:relative; isolation:isolate; }
+    .brand-mark::after {
+      content:""; position:absolute; inset:-4px; border:1px solid rgba(145,189,112,.55);
+      border-radius:18px; animation:brandPulse 3.5s ease-in-out infinite; z-index:-1;
+    }
+    .hero { isolation:isolate; }
+    .hero::before {
+      content:""; position:absolute; width:310px; height:310px; top:-110px; right:17%;
+      border:1px solid rgba(255,255,255,.2); border-radius:50%;
+      box-shadow:0 0 0 28px rgba(255,255,255,.035),0 0 0 58px rgba(255,255,255,.025);
+      animation:slowOrbit 24s linear infinite; pointer-events:none; z-index:0;
+    }
+    .hero-aside { animation:floatCard 7s ease-in-out infinite; }
+    .hero-aside img { animation:softZoom 18s ease-in-out infinite alternate; }
+    .hero .primary-btn, .secondary-btn, .nav-cta { will-change:transform; }
+
+    /* Light photographic texture keeps the pale sections from feeling empty. */
+    .section#mission, .section#about {
+      position:relative; isolation:isolate;
+      background:linear-gradient(90deg,rgba(249,248,242,.92),rgba(249,248,242,.82)),
+        url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1600&q=75') center/cover;
+      border-radius:26px;
+    }
+    .library-section {
+      background:
+        linear-gradient(rgba(255,254,250,.86),rgba(255,254,250,.91)),
+        url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1800&q=75') center/cover fixed;
+    }
+    .reviews-section {
+      background:
+        linear-gradient(rgba(255,254,250,.88),rgba(255,254,250,.90)),
+        url('https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1600&q=75') center/cover;
+    }
+    .about-card, .disease-card, .yoga-chip, .review-card {
+      box-shadow:0 10px 28px rgba(23,63,45,.055);
+      transition:transform .45s cubic-bezier(.2,.75,.25,1),box-shadow .45s ease,border-color .3s ease;
+    }
+    .about-card:hover, .yoga-chip:hover, .review-card:hover {
+      transform:translateY(-6px); box-shadow:0 18px 38px rgba(23,63,45,.11);
+    }
+    .disease-card { animation:cardEntrance .55s both; }
+    .disease-card:nth-child(4n+2) { animation-delay:.05s; }
+    .disease-card:nth-child(4n+3) { animation-delay:.1s; }
+    .disease-card:nth-child(4n+4) { animation-delay:.15s; }
+    .card-symbol { transition:transform .45s ease,background .3s ease; }
+    .disease-card:hover .card-symbol { transform:rotate(-12deg) scale(1.1); background:#e3efd8; }
+    .feature-photo { position:relative; overflow:hidden; }
+    .feature-photo::after {
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(20,58,41,.08),rgba(20,58,41,.35));
+      transition:opacity .5s ease;
+    }
+    .feature-inner:hover .feature-photo::after { opacity:.55; }
+    .yoga-intro { box-shadow:0 15px 38px rgba(23,63,45,.12); transition:transform .5s ease; }
+    .yoga-intro:hover { transform:translateY(-5px); }
+    .chat-widget { transition:transform .45s ease,box-shadow .45s ease; }
+    .chat-widget:hover { transform:translateY(-4px); box-shadow:0 28px 70px rgba(23,63,45,.2); }
+    .chat-avatar { animation:avatarGlow 3s ease-in-out infinite; }
+    .online-dot { animation:onlinePulse 2s ease-out infinite; }
+
+    .visual-moments {
+      position:relative; overflow:hidden; padding:66px 5vw 82px;
+      background:linear-gradient(110deg,rgba(226,238,216,.65),rgba(255,254,250,.88)),
+        url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=70') center/cover;
+      border-top:1px solid rgba(23,63,45,.06); border-bottom:1px solid rgba(23,63,45,.06);
+    }
+    .visual-moments-inner { max-width:1240px; margin:0 auto; }
+    .gallery-heading { margin-bottom:25px; }
+    .photo-mosaic {
+      display:grid; grid-template-columns:1.25fr .85fr .85fr; grid-template-rows:205px 205px;
+      gap:16px;
+    }
+    .photo-tile {
+      position:relative; min-width:0; min-height:0; overflow:hidden; margin:0;
+      border-radius:21px; background:#dce8d4; box-shadow:0 14px 35px rgba(23,63,45,.12);
+      isolation:isolate;
+    }
+    .photo-tile-large { grid-row:1 / span 2; }
+    .photo-tile-tall { grid-row:1 / span 2; grid-column:2; }
+    .photo-tile:nth-child(3) { grid-column:3; grid-row:1; }
+    .photo-tile:nth-child(4) { grid-column:3; grid-row:2; }
+    .photo-tile img {
+      width:100%; height:100%; display:block; object-fit:cover;
+      transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .7s ease;
+      filter:saturate(.9);
+    }
+    .photo-tile::after {
+      content:""; position:absolute; inset:0; z-index:0;
+      background:linear-gradient(0deg,rgba(9,34,22,.76),rgba(9,34,22,.02) 68%);
+      transition:opacity .45s ease;
+    }
+    .photo-tile:hover img { transform:scale(1.09); filter:saturate(1.12); }
+    .photo-tile:hover::after { opacity:.85; }
+    .photo-tile figcaption {
+      position:absolute; z-index:1; left:20px; right:18px; bottom:18px;
+      color:white; display:grid; gap:5px; text-shadow:0 2px 10px rgba(0,0,0,.28);
+    }
+    .photo-tile figcaption span { color:#d9e9c8; font-size:.65rem; font-weight:850; letter-spacing:.14em; text-transform:uppercase; }
+    .photo-tile figcaption strong { font:700 clamp(1rem,1.8vw,1.45rem)/1.12 Georgia,serif; }
+    .photo-tile-large figcaption strong, .photo-tile-tall figcaption strong { font-size:clamp(1.35rem,2.4vw,2rem); }
+
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1); }
+    .reveal.is-visible { opacity:1; transform:translateY(0); }
+    .reveal.from-left { transform:translateX(-28px); }
+    .reveal.from-left.is-visible { transform:translateX(0); }
+    .reveal.from-right { transform:translateX(28px); }
+    .reveal.from-right.is-visible { transform:translateX(0); }
+
+    @keyframes floatCard { 0%,100% { transform:translateY(0) rotate(0); } 50% { transform:translateY(-9px) rotate(.35deg); } }
+    @keyframes softZoom { from { transform:scale(1); } to { transform:scale(1.07); } }
+    @keyframes slowOrbit { to { transform:rotate(360deg); } }
+    @keyframes brandPulse { 0%,100% { transform:scale(1); opacity:.85; } 50% { transform:scale(1.15); opacity:.25; } }
+    @keyframes cardEntrance { from { opacity:0; transform:translateY(13px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes avatarGlow { 0%,100% { box-shadow:0 0 0 0 rgba(220,235,208,.28); } 50% { box-shadow:0 0 0 7px rgba(220,235,208,0); } }
+    @keyframes onlinePulse { 0% { box-shadow:0 0 0 0 rgba(168,216,140,.65); } 75%,100% { box-shadow:0 0 0 8px rgba(168,216,140,0); } }
+
+    @media (max-width:900px) {
+      .photo-mosaic { grid-template-columns:1fr 1fr; grid-template-rows:230px 180px 180px; }
+      .photo-tile-large { grid-column:1; grid-row:1 / span 2; }
+      .photo-tile-tall { grid-column:2; grid-row:1 / span 2; }
+      .photo-tile:nth-child(3) { grid-column:1; grid-row:3; }
+      .photo-tile:nth-child(4) { grid-column:2; grid-row:3; }
+    }
+    @media (max-width:600px) {
+      .visual-moments { padding:52px 5vw 60px; }
+      .photo-mosaic { grid-template-columns:1fr 1fr; grid-template-rows:210px 155px 155px; gap:10px; }
+      .photo-tile-large { grid-column:1 / span 2; grid-row:1; }
+      .photo-tile-tall { grid-column:1; grid-row:2 / span 2; }
+      .photo-tile:nth-child(3) { grid-column:2; grid-row:2; }
+      .photo-tile:nth-child(4) { grid-column:2; grid-row:3; }
+      .photo-tile figcaption { left:13px; right:12px; bottom:13px; }
+      .photo-tile figcaption strong { font-size:1rem; }
+      .photo-tile-large figcaption strong { font-size:1.35rem; }
+      .section#mission, .section#about { border-radius:18px; }
+      body { background-attachment:scroll; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .hero-aside, .hero-aside img, .hero::before, .brand-mark::after, .chat-avatar, .online-dot { animation:none !important; }
+      .reveal { opacity:1 !important; transform:none !important; }
+      .photo-tile img { transition:none !important; }
+    }
+
+  </style>
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="AyuCare home">
+      <span class="brand-mark" aria-hidden="true">✿</span>
+      <span><span class="brand-name">AyuCare</span><span class="brand-tag">Ayurveda · Yoga · Wellbeing</span></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="#mission">Our approach</a>
+      <a href="#wellness-gallery">Nature</a>
+      <a href="#library">Health library</a>
+      <a href="#yoga">Yoga</a>
+      <a href="#assistant">Assistant</a>
+      <a href="#about">About</a>
+      <a href="#reviews">Stories</a>
+      <a class="nav-cta" href="#assistant">Ask AyuCare ↗</a>
+    </nav>
+  </header>
 
-<header>
-  <h1>🌿 AyuCare</h1>
-  <nav>
-    <a href="#mission">Mission</a>
-    <a href="#diseases">Diseases</a>
-    <a href="#yoga">Yoga</a>
-    <a href="#chatbot">Chatbot</a>
-    <a href="#about">About</a>
-    <a href="#popularity">Popularity</a>
-  </nav>
-</header>
+  <main id="main">
+    <div class="hero-wrap" id="home">
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <span class="eyebrow">A thoughtful wellness companion</span>
+          <h1 id="heroTitle">A little more <em>balance</em> in everyday life.</h1>
+          <p>Explore an approachable library of health topics, learn about yoga traditions, and find your way around our Ayurveda-inspired wellness information.</p>
+          <div class="hero-actions">
+            <a class="primary-btn" href="#library">Explore the library ↓</a>
+            <a class="secondary-btn" href="#assistant">Chat with AyuCare <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="hero-note">Wellness education, not diagnosis or a replacement for professional medical care.</p>
+        </div>
+        <aside class="hero-aside" aria-label="AyuCare nature note">
+          <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=700&q=80" alt="Person practising a calm yoga pose in a bright studio" />
+          <div><small>Find your rhythm</small><strong>Knowledge. Nature. Balance.</strong><p>Small steps towards informed wellbeing.</p></div>
+        </aside>
+      </section>
+    </div>
 
-<main>
-  <div class="hero">
-    <h2>Welcome to AyuCare</h2>
-    <p>Your trusted Ayurveda & Yoga wellness companion — guided by tradition, supported by science.</p>
-    <input type="text" id="search-bar" placeholder="🔍 Search diseases or yoga..." />
-    <div id="suggestions"></div>
-    <div id="detailSection"></div>
+    <div class="stats-bar" aria-label="AyuCare library information">
+      <div class="stat"><span class="stat-icon">✧</span><div><strong id="topicStat">—</strong><span>distinct health topics</span></div></div>
+      <div class="stat"><span class="stat-icon">⌕</span><div><strong id="recordStat">—</strong><span>source records reviewed</span></div></div>
+      <div class="stat"><span class="stat-icon">♡</span><div><strong>Private</strong><span>chat stays in this browser</span></div></div>
+    </div>
+
+    <section class="section" id="mission">
+      <div class="section-heading">
+        <div><span class="overline">Our approach</span><h2>Wellness information, made easier to explore.</h2></div>
+        <p>AyuCare brings the information in your uploaded dataset into one searchable place. Entries are presented as educational material, not as clinically approved treatment plans.</p>
+      </div>
+      <div class="about-grid">
+        <article class="about-card">
+          <h3>Rooted in curiosity</h3>
+          <p>Learn the names and basic descriptions of health topics in the library, discover the yoga terms included in the source file, and use the assistant to locate relevant entries. For personal health concerns, speak with a qualified healthcare professional.</p>
+        </article>
+        <div class="about-image" role="img" aria-label="Sunlight falling through a lush green forest"></div>
+      </div>
+    </section>
+
+    <section class="visual-moments" id="wellness-gallery" aria-labelledby="galleryTitle">
+      <div class="visual-moments-inner">
+        <div class="section-heading gallery-heading">
+          <div><span class="overline">A moment with nature</span><h2 id="galleryTitle">A visual journey to everyday wellbeing.</h2></div>
+          <p>Explore calming scenes inspired by green spaces, mindful movement and the natural world.</p>
+        </div>
+        <div class="photo-mosaic">
+          <figure class="photo-tile photo-tile-large reveal">
+            <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=85" alt="Sunlight falling over fresh green leaves" loading="lazy">
+            <figcaption><span>01 / Nature</span><strong>Let nature slow the moment.</strong></figcaption>
+          </figure>
+          <figure class="photo-tile photo-tile-tall reveal">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=85" alt="A peaceful meditation practice in warm light" loading="lazy">
+            <figcaption><span>02 / Mindfulness</span><strong>Make space to breathe.</strong></figcaption>
+          </figure>
+          <figure class="photo-tile reveal">
+            <img src="https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&w=900&q=85" alt="Lush botanical foliage" loading="lazy">
+            <figcaption><span>03 / Botanicals</span><strong>Discover the green world.</strong></figcaption>
+          </figure>
+          <figure class="photo-tile reveal">
+            <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=85" alt="A quiet forest with tall trees" loading="lazy">
+            <figcaption><span>04 / Outdoors</span><strong>Find calm in open spaces.</strong></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="library-section" id="library">
+      <div class="library-inner">
+        <div class="section-heading">
+          <div><span class="overline">Explore the collection</span><h2>Your health-topic library.</h2></div>
+          <p>Search by topic name, Hindi name, a description, or a yoga term. Select any card to see the information supplied in the data file.</p>
+        </div>
+        <div class="search-panel" role="search">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="librarySearch" type="search" placeholder="Search a health topic or yoga name…" autocomplete="off" aria-label="Search the health topic library" />
+          <button id="searchClear" type="button" aria-label="Clear search">Clear</button>
+        </div>
+        <div id="searchResults" class="search-results" aria-live="polite"></div>
+        <div class="toolbar">
+          <div class="filters" id="categoryFilters" aria-label="Filter topics">
+            <button class="filter-btn active" data-filter="all" type="button">All topics</button>
+            <button class="filter-btn" data-filter="general" type="button">General</button>
+            <button class="filter-btn" data-filter="digestive" type="button">Digestive</button>
+            <button class="filter-btn" data-filter="respiratory" type="button">Respiratory</button>
+            <button class="filter-btn" data-filter="skin" type="button">Skin & hair</button>
+            <button class="filter-btn" data-filter="other" type="button">Other</button>
+          </div>
+          <span class="library-count" id="libraryCount" aria-live="polite">Loading health library…</span>
+        </div>
+        <div class="library-examples-control">
+          <div class="library-examples-copy">
+            <strong>Medical Health Library examples</strong>
+            <span id="libraryExamplesHint">Examples are collapsed by default to keep the page compact. Expand them whenever you want to browse.</span>
+          </div>
+          <button class="library-toggle-btn" id="toggleLibraryExamples" type="button" aria-controls="diseaseGrid" aria-expanded="false">
+            <span class="library-toggle-icon" id="libraryToggleIcon" aria-hidden="true">＋</span>
+            <span id="libraryToggleLabel">Show examples</span>
+          </button>
+        </div>
+        <div class="disease-grid" id="diseaseGrid" aria-live="polite" hidden>
+          <div class="empty-state">Loading your AyuCare data file…</div>
+        </div>
+        <p class="loader-note" id="dataStatus" role="status"></p>
+      </div>
+    </section>
+
+    <section class="feature-band" id="nature">
+      <div class="feature-inner">
+        <div class="feature-photo" role="img" aria-label="A peaceful green landscape"></div>
+        <div class="feature-copy"><span class="overline">A calmer everyday</span><h2>Make room for mindful moments.</h2><p>Nature imagery and simple movement can make a wellness space feel welcoming. Choose activities that are comfortable for you, and check with a clinician before beginning exercise for a medical condition.</p><a href="#yoga">Explore yoga terms ↓</a></div>
+      </div>
+    </section>
+
+    <section class="section" id="yoga">
+      <div class="section-heading">
+        <div><span class="overline">Move with awareness</span><h2>Yoga terms in your dataset.</h2></div>
+        <p>These are the pose and practice names found in your source data. They are listed for reference and are not prescriptions for treating a condition.</p>
+      </div>
+      <div class="yoga-area">
+        <div class="yoga-intro"><h3>Movement can be a mindful practice.</h3><p>Keep it gentle, comfortable and appropriate for your abilities.</p></div>
+        <div class="yoga-list" id="yogaList"><p class="loader-note">Loading yoga entries…</p></div>
+      </div>
+    </section>
+
+    <section class="chat-section" id="assistant">
+      <div class="section chat-layout">
+        <div class="chat-copy">
+          <span class="overline">AyuCare assistant</span>
+          <h2>Ask. Explore. Learn.</h2>
+          <p>The assistant searches the connected <strong>data.json</strong> file and helps you find matching health-topic and yoga entries. It does not diagnose symptoms or create treatment plans.</p>
+          <div class="chat-points">
+            <div><span>✓</span> Searches the uploaded dataset, not a hard-coded two-topic list.</div>
+            <div><span>✓</span> Understands common topic names and selected aliases.</div>
+            <div><span>✓</span> Shows where information came from and flags unverified entries.</div>
+            <div><span>✓</span> Runs locally in the page; messages are not sent to an AI service.</div>
+          </div>
+        </div>
+        <div class="chat-widget" aria-label="AyuCare chat assistant">
+          <div class="chat-head">
+            <div class="chat-brand"><span class="chat-avatar">✿</span><div><strong>AyuCare Guide</strong><small><span class="online-dot"></span><span id="chatDataLabel">Connecting to health library…</span></small></div></div>
+            <span class="chat-status">Dataset mode</span>
+          </div>
+          <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions">
+            <div class="message bot"><p>Hello! I’m the AyuCare Guide. I can help you search the health topics and yoga terms in the AyuCare library.</p><p>Try asking: <strong>“What is anemia?”</strong> or <strong>“Show yoga entries.”</strong></p><span class="caution">I can’t diagnose a condition or recommend treatment. For personal health advice, consult a qualified healthcare professional.</span></div>
+          </div>
+          <div class="quick-prompts" id="quickPrompts">
+            <button type="button" data-prompt="Show all health topics">Browse topics</button>
+            <button type="button" data-prompt="What is anemia?">Anemia</button>
+            <button type="button" data-prompt="Show yoga entries">Yoga terms</button>
+          </div>
+          <form class="chat-form" id="chatForm">
+            <input id="chatInput" type="text" placeholder="Ask about a health topic…" aria-label="Type your message" maxlength="240" autocomplete="off" />
+            <button class="send-btn" type="submit" aria-label="Send message">➤</button>
+          </form>
+          <div class="chat-footnote">Educational information only · No diagnosis · No chat history stored</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-heading"><div><span class="overline">About AyuCare</span><h2>Tradition-inspired. Clear about its limits.</h2></div><p>Good health information should be accessible, transparent and careful about what it can and cannot tell you.</p></div>
+      <div class="about-grid">
+        <article class="about-card"><h3>What this site does</h3><p>It organises your supplied health-topic dataset, makes it searchable, and displays source descriptions, remedy text and yoga names with clear safety labels. Duplicate entries are merged for display while their distinct notes are retained.</p></article>
+        <article class="about-card"><h3>What this site does not do</h3><p>It is not a medical device, diagnostic tool, emergency service or substitute for a doctor. The uploaded dataset has not been clinically validated here. Do not stop prescribed treatment or start herbs, supplements or home remedies based on this website.</p></article>
+      </div>
+    </section>
+
+    <section class="reviews-section" id="reviews">
+      <div class="section" style="padding-bottom:62px;">
+        <div class="section-heading"><div><span class="overline">Community corner</span><h2>Feedback space.</h2></div><p>A place to showcase genuine comments from visitors, once they have been collected with permission.</p></div>
+        <div class="review-note"><span aria-hidden="true">ⓘ</span><div><strong>Sample layout content</strong><br>The cards below are demonstration text only. They are not real testimonials and do not represent verified users or health outcomes. Replace them with genuine, permission-based feedback before publishing.</div></div>
+        <div class="review-grid" id="reviewGrid">
+          <article class="review-card"><span class="sample-tag">Demo content</span><p>“The topic library is easy to browse and the information is clearly organised.”</p><strong>Sample visitor 01</strong><small>Example feedback · Not a real review</small></article>
+          <article class="review-card"><span class="sample-tag">Demo content</span><p>“I like having the yoga terms and health topics collected in one place.”</p><strong>Sample visitor 02</strong><small>Example feedback · Not a real review</small></article>
+          <article class="review-card"><span class="sample-tag">Demo content</span><p>“The website makes it clear when I should seek professional medical advice.”</p><strong>Sample visitor 03</strong><small>Example feedback · Not a real review</small></article>
+        </div>
+      </div>
+    </section>
+
+    <div class="safety-banner">
+      <div class="safety-inner"><span class="icon" aria-hidden="true">⚕</span><div><strong>Important health notice</strong><p>AyuCare provides general educational content only. A symptom or a database match cannot confirm a disease. For new, worsening or concerning symptoms, contact a qualified healthcare professional. For a medical emergency, seek emergency services immediately.</p></div></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true">✿</span><span><span class="brand-name">AyuCare</span><span class="brand-tag">Ayurveda · Yoga · Wellbeing</span></span></a>
+      <p>© <span id="yearNow"></span> AyuCare. Educational wellness information, presented with care.</p>
+      <p>Designed for learning, not diagnosis.</p>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <article class="detail-modal">
+      <div class="modal-header"><div><h2 id="modalTitle">Health topic</h2><p id="modalHindi"></p></div><button class="modal-close" id="modalClose" type="button" aria-label="Close details">×</button></div>
+      <div class="modal-content" id="modalContent"></div>
+    </article>
   </div>
 
-  <section id="mission">
-    <h2 class="section-title">Our Mission</h2>
-    <p>To bring the timeless wisdom of Ayurveda and Yoga to modern living, offering natural healing, holistic balance, and wellness for all.</p>
-  </section>
+  <script>
+    'use strict';
+    const DATA_URL = './data.json';
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+    let sourceRecords = [];
+    let topics = [];
+    let activeFilter = 'all';
+    let libraryExamplesExpanded = false;
 
-  <section id="chatbot">
-    <h2 class="section-title">Chat with Our Ayurvedic Assistant</h2>
-    <div id="chtl-inline-bot" style="width: 100%; height: 500px; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.2);"></div>
-  </section>
+    const topicAliases = {
+      'blood pressure': 'hypertension', 'high bp': 'hypertension', 'bp': 'hypertension',
+      'low hb': 'anemia', 'anaemia': 'anemia', 'low hemoglobin': 'anemia',
+      'high blood sugar': 'diabetes', 'sugar disease': 'diabetes',
+      'period pain': 'menstrual cramps', 'period cramps': 'menstrual cramps',
+      'polycystic ovarian syndrome': 'polycystic ovary syndrome (pcos)', 'pcod': 'pcos',
+      'urine infection': 'urinary tract infection (uti)', 'urinary infection': 'urinary tract infection (uti)',
+      'kidney stone': 'kidney stones', 'gallbladder stone': 'gallstones',
+      'joint inflammation': 'arthritis', 'eczema': 'skin allergies',
+      'common cold': 'cold & cough', 'blocked nose': 'sinusitis'
+    };
 
-  <section id="diseases">
-    <h2 class="section-title">Common Ailments & Ayurvedic Remedies</h2>
-    <div id="disease-cards" class="card-container"></div>
-  </section>
+    const categoryRules = {
+      digestive: /acidity|constipation|diarrhea|digestive|gallstone|nausea|stomach|ulcer|hemorrhoid|liver|gout/i,
+      respiratory: /asthma|bronchitis|cold|cough|respiratory|sinus|throat|sleep apnea|allergic rhinitis/i,
+      skin: /skin|psoriasis|acne|hair|yeast|allerg/i,
+      general: /anemia|anxiety|stress|insomnia|headache|migraine|obesity|weight|fever|fatigue|vitamin|thyroid|diabetes|hypertension|blood pressure/i
+    };
+    const symbols = [ '✧', '❀', '☘', '◈', '✿', '❋', '❖', '♧' ];
 
-  <section id="yoga">
-    <h2 class="section-title">Yoga for Mind & Body</h2>
-    <div id="yoga-cards" class="card-container"></div>
-  </section>
+    function normalize(value) {
+      return String(value || '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+    }
+    function uniqueStrings(values) {
+      const seen = new Set();
+      return (values || []).filter(value => {
+        const key = normalize(value);
+        if (!key || seen.has(key)) return false;
+        seen.add(key); return true;
+      });
+    }
+    function mergeDataset(records) {
+      const map = new Map();
+      for (const raw of records) {
+        if (!raw || typeof raw.title !== 'string' || !raw.title.trim()) continue;
+        const key = normalize(raw.title);
+        if (!map.has(key)) {
+          map.set(key, { title: raw.title.trim(), hindi: raw.hindi || '', summaries: [], remedies: [], yoga: [], sourceCount: 0 });
+        }
+        const item = map.get(key);
+        item.sourceCount += 1;
+        if (raw.hindi && !item.hindi) item.hindi = raw.hindi;
+        if (raw.summary) item.summaries.push(raw.summary);
+        if (Array.isArray(raw.remedies)) item.remedies.push(...raw.remedies.filter(x => typeof x === 'string'));
+        if (Array.isArray(raw.yoga)) item.yoga.push(...raw.yoga.filter(y => y && typeof y.name === 'string'));
+      }
+      return [...map.values()].map(item => ({
+        ...item,
+        summary: uniqueStrings(item.summaries).join(' · '),
+        remedies: uniqueStrings(item.remedies),
+        yoga: item.yoga.filter((y, i, arr) => arr.findIndex(z => normalize(z.name) === normalize(y.name) && normalize(z.desc) === normalize(y.desc)) === i)
+      })).sort((a,b) => a.title.localeCompare(b.title));
+    }
+    function categoryFor(topic) {
+      const text = `${topic.title} ${topic.summary}`;
+      for (const [key, rule] of Object.entries(categoryRules)) if (rule.test(text)) return key;
+      return 'other';
+    }
+    function setDataStatus(message, isError = false) {
+      const status = $('#dataStatus');
+      status.textContent = message;
+      status.style.color = isError ? '#9a4a37' : '';
+      $('#chatDataLabel').textContent = isError ? 'Library could not be loaded' : `${topics.length} topics connected`;
+    }
 
-  <section id="about">
-    <h2 class="section-title">About AyuCare</h2>
-    <p>Founded by Ayurveda enthusiasts and wellness experts, AyuCare connects ancient Indian health practices with modern digital tools. Our platform offers herbal remedies, yoga postures, and holistic routines for better living.</p>
-  </section>
+    async function loadDataset() {
+      try {
+        const response = await fetch(DATA_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`data.json returned HTTP ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error('The data file must contain a JSON array.');
+        sourceRecords = data;
+        topics = mergeDataset(data);
+        if (!topics.length) throw new Error('No usable topic records were found in data.json.');
+        $('#topicStat').textContent = topics.length;
+        $('#recordStat').textContent = sourceRecords.length;
+        renderDiseaseCards();
+        renderYogaList();
+        setDataStatus(`Connected successfully: ${sourceRecords.length} source records grouped into ${topics.length} distinct topic entries. Duplicate title entries are combined for display.`);
+      } catch (error) {
+        console.error('AyuCare dataset loading error:', error);
+        $('#topicStat').textContent = '—';
+        $('#recordStat').textContent = '—';
+        $('#libraryCount').textContent = 'Data file unavailable';
+        $('#diseaseGrid').innerHTML = '<div class="empty-state"><strong>Could not load data.json.</strong><br>Place index.html and data.json in the same folder and open the site through a local web server or your hosting provider. Opening the HTML directly as a file can block fetch requests.</div>';
+        $('#yogaList').textContent = 'Yoga entries could not be loaded because data.json is unavailable.';
+        setDataStatus('Dataset connection failed. Check that data.json is beside index.html and is valid JSON.', true);
+      }
+    }
 
-  <!-- =================== NEW POPULARITY SECTION =================== -->
-  <section id="popularity" style="margin-top:80px;">
-    <h2 class="section-title">🌿 Trusted by 12,000+ Users</h2>
-    <p style="max-width:700px; margin:0 auto; color:var(--primary);">
-      People across India use AyuCare daily for Ayurvedic remedies and yoga guidance.
-    </p>
+    function renderDiseaseCards(filter = activeFilter, query = '') {
+      const grid = $('#diseaseGrid');
+      const q = normalize(query);
+      const filtered = topics.filter(topic => {
+        const categoryMatch = filter === 'all' || (filter === 'other' ? !['general','digestive','respiratory','skin'].includes(categoryFor(topic)) : categoryFor(topic) === filter);
+        const content = normalize([topic.title, topic.hindi, topic.summary, ...topic.remedies, ...topic.yoga.map(y => `${y.name} ${y.desc || ''}`)].join(' '));
+        return categoryMatch && (!q || content.includes(q));
+      });
+      $('#libraryCount').textContent = `${filtered.length} of ${topics.length} topics`;
+      grid.replaceChildren();
+      if (!libraryExamplesExpanded) return;
+      if (!filtered.length) {
+        const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No matching topics. Try another search term or choose All topics.'; grid.append(empty); return;
+      }
+      filtered.forEach((topic, index) => {
+        const button = document.createElement('button');
+        button.type = 'button'; button.className = 'disease-card'; button.setAttribute('aria-label', `Open ${topic.title} details`);
+        const top = document.createElement('div'); top.className = 'card-topline';
+        const symbol = document.createElement('span'); symbol.className = 'card-symbol'; symbol.textContent = symbols[index % symbols.length];
+        const arrow = document.createElement('span'); arrow.className = 'card-arrow'; arrow.textContent = '↗';
+        top.append(symbol, arrow);
+        const title = document.createElement('h3'); title.textContent = topic.title;
+        const hindi = document.createElement('div'); hindi.className = 'hindi'; hindi.textContent = topic.hindi || 'AyuCare library entry';
+        const summary = document.createElement('p'); summary.textContent = topic.summary.split(' · ')[0] || 'Open this entry to view its dataset information.';
+        button.append(top, title, hindi, summary);
+        button.addEventListener('click', () => showTopic(topic));
+        grid.append(button);
+      });
+    }
 
-    <!-- Stats -->
-    <div class="pop-card">
-      <h3>12k+</h3>
-      <p>Active Users</p>
-    </div>
-    <div class="pop-card">
-      <h3>4.8⭐</h3>
-      <p>Average Rating</p>
-    </div>
-    <div class="pop-card">
-      <h3>98%</h3>
-      <p>User Satisfaction</p>
-    </div>
+    function renderYogaList() {
+      const yogaMap = new Map();
+      topics.forEach(topic => topic.yoga.forEach(y => {
+        const key = normalize(y.name);
+        if (!yogaMap.has(key)) yogaMap.set(key, { name: y.name, descriptions: [] });
+        if (y.desc) yogaMap.get(key).descriptions.push(y.desc);
+      }));
+      const items = [...yogaMap.values()].sort((a,b) => a.name.localeCompare(b.name)).slice(0,8);
+      const list = $('#yogaList'); list.replaceChildren();
+      if (!items.length) { list.textContent = 'No yoga entries were found in the dataset.'; return; }
+      items.forEach(item => {
+        const card = document.createElement('div'); card.className = 'yoga-chip';
+        const icon = document.createElement('span'); icon.textContent = '☘';
+        const body = document.createElement('div');
+        const name = document.createElement('strong'); name.textContent = item.name;
+        const desc = document.createElement('small'); desc.textContent = uniqueStrings(item.descriptions).slice(0,2).join(' · ') || 'Listed in the uploaded dataset.';
+        body.append(name,desc); card.append(icon,body); list.append(card);
+      });
+      const remaining = Math.max(0, yogaMap.size - items.length);
+      if (remaining) { const note = document.createElement('p'); note.className = 'loader-note'; note.textContent = `Showing 8 of ${yogaMap.size} distinct yoga terms in the source data.`; list.append(note); }
+    }
 
-    <!-- Reviews -->
-    <h3 class="section-title">🌟 User Reviews</h3>
-    <div id="review-container"></div>
-  </section>
+    function makeSection(title, values, note) {
+      const heading = document.createElement('h3'); heading.textContent = title;
+      const p = document.createElement('p'); p.textContent = note;
+      const ul = document.createElement('ul');
+      values.forEach(value => { const li = document.createElement('li'); li.textContent = value; ul.append(li); });
+      return [heading,p,ul];
+    }
+    function showTopic(topic) {
+      $('#modalTitle').textContent = topic.title;
+      $('#modalHindi').textContent = topic.hindi || '';
+      const content = $('#modalContent'); content.replaceChildren();
+      const summary = document.createElement('p'); summary.textContent = topic.summary || 'No summary was supplied in the dataset.'; content.append(summary);
+      const warning = document.createElement('div'); warning.className = 'data-warning'; warning.textContent = 'Dataset caution: the following remedy text was imported from your source file. It has not been medically verified by AyuCare. Do not use it as a treatment plan or start herbs, supplements, oils or home remedies without advice from a qualified healthcare professional.'; content.append(warning);
+      if (topic.remedies.length) content.append(...makeSection('Imported remedy notes (unverified)', topic.remedies, 'These are source-file statements, not recommendations or instructions.'));
+      if (topic.yoga.length) content.append(...makeSection('Yoga / practice terms in this entry', topic.yoga.map(y => `${y.name}${y.desc ? ': ' + y.desc : ''}`), 'Yoga is not a substitute for medical evaluation or treatment. Check whether a practice is suitable for you before trying it.'));
+      const source = document.createElement('p'); source.className = 'loader-note'; source.textContent = `Source: data.json · ${topic.sourceCount} record${topic.sourceCount === 1 ? '' : 's'} grouped under this exact title.`; content.append(source);
+      $('#detailModal').classList.add('open');
+      $('#modalClose').focus();
+    }
 
-</main>
+    function addMessage(role, content, options = {}) {
+      const bubble = document.createElement('div'); bubble.className = `message ${role}`;
+      if (typeof content === 'string') {
+        const p = document.createElement('p'); p.textContent = content; bubble.append(p);
+      } else {
+        bubble.append(content);
+      }
+      if (options.caution) { const caution = document.createElement('span'); caution.className = 'caution'; caution.textContent = options.caution; bubble.append(caution); }
+      $('#chatMessages').append(bubble);
+      $('#chatMessages').scrollTop = $('#chatMessages').scrollHeight;
+      return bubble;
+    }
+    function responseBlock(title, summary, items, label) {
+      const fragment = document.createDocumentFragment();
+      const titleEl = document.createElement('span'); titleEl.className = 'message-title'; titleEl.textContent = title; fragment.append(titleEl);
+      if (summary) { const p = document.createElement('p'); p.textContent = summary; fragment.append(p); }
+      if (items && items.length) {
+        const ul = document.createElement('ul');
+        items.slice(0,4).forEach(item => { const li = document.createElement('li'); li.textContent = item; ul.append(li); });
+        fragment.append(ul);
+      }
+      const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'message-action'; btn.textContent = label || 'Open full topic details';
+      btn.addEventListener('click', () => showTopic(topics.find(t => normalize(t.title) === normalize(title))));
+      fragment.append(btn);
+      return fragment;
+    }
+    function findTopicMatches(rawQuery) {
+      let query = normalize(rawQuery);
+      for (const [alias, target] of Object.entries(topicAliases)) {
+        if (query === normalize(alias) || query.includes(normalize(alias))) query = `${query} ${normalize(target)}`;
+      }
+      const words = query.split(' ').filter(w => w.length > 2);
+      const ranked = topics.map(topic => {
+        const title = normalize(topic.title), hindi = normalize(topic.hindi), summary = normalize(topic.summary);
+        let score = 0;
+        if (query === title || query.includes(title)) score += 100;
+        if (title.includes(query)) score += 85;
+        if (hindi && (query === hindi || query.includes(hindi))) score += 95;
+        if (summary.includes(query)) score += 40;
+        const text = normalize([topic.title,topic.hindi,topic.summary].join(' '));
+        const overlap = words.filter(word => text.includes(word)).length;
+        score += overlap * 8;
+        return { topic, score };
+      }).filter(x => x.score > 0).sort((a,b) => b.score - a.score);
+      if (ranked.length && ranked[0].score >= 85) return ranked.slice(0,1).map(x => x.topic);
+      return ranked.slice(0,5).map(x => x.topic);
+    }
+    function handleChat(raw) {
+      const input = String(raw || '').trim();
+      if (!input) return;
+      addMessage('user', input);
+      const q = normalize(input);
+      if (/\b(hello|hi|hey|namaste|good morning|good evening)\b/.test(q)) {
+        addMessage('bot', 'Hello! Ask me to find a health topic or a yoga term in the AyuCare dataset. For example, “What is anemia?” or “Find hypertension.”'); return;
+      }
+      if (/\b(list|show|browse|all)\b/.test(q) && /\b(topics|diseases|conditions|library|entries)\b/.test(q)) {
+        const names = topics.slice(0,12).map(t => t.title).join(', ');
+        const more = topics.length > 12 ? `, and ${topics.length - 12} more` : '';
+        addMessage('bot', `The library contains ${topics.length} distinct topic titles. Here are some: ${names}${more}. Use the health library above to browse the full collection.`); return;
+      }
+      if (/\byoga\b|\basana\b|\bposes\b/.test(q) && !findTopicMatches(q).length) {
+        const names = uniqueStrings(topics.flatMap(t => t.yoga.map(y => y.name))).slice(0,12);
+        addMessage('bot', `Your data file includes these yoga or practice terms: ${names.join(', ')}. They are listed for reference, not as treatments. Ask about a specific health topic to see its associated source entry.`); return;
+      }
+      const urgentTerms = /(?:\b(?:i|im|my|someone|he|she|they)\b.{0,55}\b(?:chest pain|cannot breathe|difficulty breathing|trouble breathing|severe shortness of breath|unconscious|fainted|seizure|stroke|face drooping|severe allergic reaction|heavy bleeding|self harm)\b)|\b(?:cannot breathe|can t breathe|severe shortness of breath)\b/;
+      if (urgentTerms.test(q)) {
+        addMessage('bot', 'I can’t assess emergencies. Please seek urgent medical help now or contact your local emergency services. Do not wait for an online chatbot response.'); return;
+      }
+      const likelySymptomQuestion = /\b(why|what is wrong|what do i have|do i have|diagnose|diagnosis|my symptoms|i have|i am having|suffering from|cure|treat|treatment|medicine|dosage|dose|prescription)\b/.test(q);
+      if (/\b(cure|treat|treatment|medicine|dosage|dose|prescription|diagnose|diagnosis)\b/.test(q)) {
+        addMessage('bot', 'I can’t recommend medicines, doses, cures or treatment plans. The remedy notes in this database are unverified source text. Please ask a qualified healthcare professional about treatment for your situation.'); return;
+      }
+      const matches = findTopicMatches(input.replace(/\b(what is|tell me about|explain|details of|information about|search for|find|show me|please|can you|about)\b/g, ' ').trim());
+      if (matches.length === 1 && matches[0]) {
+        const t = matches[0];
+        const notes = t.remedies.slice(0,3).map(x => x);
+        const bubble = addMessage('bot', responseBlock(t.title, t.summary, notes.length ? notes : ['No remedy notes were supplied for this entry.']));
+        const caution = document.createElement('span'); caution.className = 'caution'; caution.textContent = 'The remedy notes above are unverified text imported from data.json, not treatment advice. Please check health decisions with a qualified clinician.'; bubble.append(caution);
+        return;
+      }
+      if (matches.length > 1) {
+        const box = document.createDocumentFragment();
+        const p = document.createElement('p'); p.textContent = 'I found a few related entries. Choose the exact topic you want to open:'; box.append(p);
+        matches.slice(0,5).forEach(t => {
+          const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'message-action'; btn.textContent = `${t.title}${t.hindi ? ' · ' + t.hindi : ''}`;
+          btn.addEventListener('click', () => showTopic(t)); box.append(btn);
+        });
+        addMessage('bot', box); return;
+      }
+      if (likelySymptomQuestion) {
+        addMessage('bot', 'I can search the library, but I can’t identify a disease from symptoms, recommend a medicine, or suggest a cure. Please contact a qualified healthcare professional for personal advice. You can search the library by a known health-topic name.'); return;
+      }
+      addMessage('bot', 'I couldn’t find a close match in the connected data.json file. Try a topic name such as anemia, asthma, diabetes, migraine, or PCOS, or choose “Browse topics” to explore the library.');
+    }
 
-<footer>
-  <p>© 2025 AyuCare | Inspired by Nature, Guided by Ayurveda 🌿</p>
-</footer>
-
-<script>
-window.chtlConfig = { chatbotId: "8663243241", display: "page_inline" }
-</script>
-<script async data-id="8663243241" data-display="page_inline" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
-
-<script>
-// ===== Original JS =====
-let diseasesData = [
-  {title:"Acidity", hindi:"अम्लता", summary:"Excess acid causes discomfort", remedies:["Jeera water","Clove"], yoga:[{name:"Vajrasana",desc:"Sits and aids digestion"}]},
-  {title:"Cold", hindi:"सर्दी", summary:"Nasal congestion and cough", remedies:["Tulsi tea","Honey"], yoga:[{name:"Bhujangasana",desc:"Opens chest"}]}
-];
-
-const diseaseContainer = document.getElementById("disease-cards");
-const yogaContainer = document.getElementById("yoga-cards");
-const searchInput = document.getElementById("search-bar");
-const suggestions = document.getElementById("suggestions");
-const detailSection = document.getElementById("detailSection");
-
-function renderCards(){
-  diseaseContainer.innerHTML=''; yogaContainer.innerHTML='';
-  diseasesData.forEach(d=>{
-    const dCard = document.createElement('div');
-    dCard.className='card';
-    dCard.innerHTML=`<div class="card-content"><h3>${d.title} (${d.hindi})</h3><p>${d.summary}</p></div>`;
-    dCard.onclick=()=>showDetail(d);
-    diseaseContainer.appendChild(dCard);
-    d.yoga.forEach(y=>{
-      const yCard = document.createElement('div');
-      yCard.className='card';
-      yCard.innerHTML=`<div class="card-content"><h3>${y.name}</h3><p>${y.desc}</p></div>`;
-      yogaContainer.appendChild(yCard);
+    $('#librarySearch').addEventListener('input', event => {
+      const value = event.target.value.trim();
+      $('#searchResults').replaceChildren();
+      renderDiseaseCards(activeFilter, value);
+      if (!value) return;
+      const matches = findTopicMatches(value).slice(0,4);
+      const container = $('#searchResults');
+      matches.forEach(topic => {
+        const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'search-result';
+        const text = document.createElement('span');
+        const strong = document.createElement('strong'); strong.textContent = topic.title;
+        const small = document.createElement('small'); small.textContent = topic.summary.split(' · ')[0] || topic.hindi;
+        text.append(strong,small); const arrow = document.createElement('span'); arrow.textContent = '↗'; btn.append(text,arrow);
+        btn.addEventListener('click', () => showTopic(topic)); container.append(btn);
+      });
+      if (!matches.length) { const empty = document.createElement('div'); empty.className = 'search-empty'; empty.textContent = 'No close topic match found in the source file.'; container.append(empty); }
     });
-  });
-  diseaseContainer.innerHTML += diseaseContainer.innerHTML;
-  yogaContainer.innerHTML += yogaContainer.innerHTML;
-}
+    $('#searchClear').addEventListener('click', () => { $('#librarySearch').value = ''; $('#searchResults').replaceChildren(); renderDiseaseCards(); $('#librarySearch').focus(); });
+    $('#categoryFilters').addEventListener('click', event => {
+      const button = event.target.closest('[data-filter]'); if (!button) return;
+      activeFilter = button.dataset.filter;
+      $$('.filter-btn').forEach(b => b.classList.toggle('active', b === button));
+      renderDiseaseCards(activeFilter, $('#librarySearch').value);
+    });
+    $('#toggleLibraryExamples').addEventListener('click', () => {
+      const button = $('#toggleLibraryExamples');
+      const grid = $('#diseaseGrid');
+      const expand = !libraryExamplesExpanded;
+      libraryExamplesExpanded = expand;
+      button.setAttribute('aria-expanded', String(expand));
+      grid.hidden = !expand;
+      $('#libraryToggleIcon').textContent = expand ? '−' : '＋';
+      $('#libraryToggleLabel').textContent = expand ? 'Hide examples' : 'Show examples';
+      $('#libraryExamplesHint').textContent = expand
+        ? 'Medical examples are visible. Collapse them again to keep the page compact.'
+        : 'Examples are collapsed by default to keep the page compact. Expand them whenever you want to browse.';
+      if (expand && topics.length) renderDiseaseCards(activeFilter, $('#librarySearch').value);
+      if (!expand) grid.replaceChildren();
+    });
+    $('#chatForm').addEventListener('submit', event => {
+      event.preventDefault(); const input = $('#chatInput'); const value = input.value; if (!value.trim()) return;
+      input.value = ''; handleChat(value);
+    });
+    $('#quickPrompts').addEventListener('click', event => { const button = event.target.closest('[data-prompt]'); if (button) handleChat(button.dataset.prompt); });
+    $('#modalClose').addEventListener('click', () => $('#detailModal').classList.remove('open'));
+    $('#detailModal').addEventListener('click', event => { if (event.target === $('#detailModal')) $('#detailModal').classList.remove('open'); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') $('#detailModal').classList.remove('open'); });
+    $('#menuToggle').addEventListener('click', () => {
+      const nav = $('#navLinks'); const open = nav.classList.toggle('open');
+      $('#menuToggle').setAttribute('aria-expanded', String(open)); $('#menuToggle').textContent = open ? '×' : '☰';
+    });
+    $('#navLinks').addEventListener('click', event => { if (event.target.closest('a')) { $('#navLinks').classList.remove('open'); $('#menuToggle').setAttribute('aria-expanded','false'); $('#menuToggle').textContent = '☰'; } });
+    $('#yearNow').textContent = new Date().getFullYear();
 
-function showDetail(d){
-  detailSection.style.display='block';
-  detailSection.innerHTML = `<h2>${d.title} (${d.hindi})</h2><p>${d.summary}</p>
-    <h3>Ayurvedic Remedies:</h3><ul>${d.remedies.map(x=>`<li>${x}</li>`).join('')}</ul>
-    ${d.yoga? `<h3>Yoga Poses:</h3><ul>${d.yoga.map(y=>`<li>${y.name}: ${y.desc}</li>`).join('')}</ul>`:''}`;
-  detailSection.scrollIntoView({behavior:'smooth'});
-}
+    // Smooth scroll progress indicator.
+    const progressBar = $('#scrollProgress');
+    const updateScrollProgress = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
+      progressBar.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
+    };
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    updateScrollProgress();
 
-searchInput.addEventListener('input',()=>{
-  const q = searchInput.value.toLowerCase();
-  suggestions.innerHTML='';
-  if(!q) return;
-  const matches = diseasesData.filter(d=> d.title.toLowerCase().includes(q) || (d.hindi && d.hindi.toLowerCase().includes(q)) || (d.yoga && d.yoga.some(y=>y.name.toLowerCase().includes(q))));
-  matches.forEach(m=>{
-    const s = document.createElement('div');
-    s.className='suggestion';
-    s.innerHTML=`<strong>${m.title} (${m.hindi})</strong><br><small>${m.summary}</small>`;
-    s.onclick=()=>{ searchInput.value=m.title; showDetail(m); suggestions.innerHTML=''; };
-    suggestions.appendChild(s);
-  });
-});
-document.addEventListener('click',e=>{if(!searchInput.contains(e.target)) suggestions.innerHTML='';});
-
-renderCards();
-
-// ===== Infinite Scroll Sliders =====
-function infiniteScroll(container, speed=0.5){
-  let scrollPos = 0;
-  const totalScroll = container.scrollWidth / 2;
-  function step(){
-    scrollPos += speed;
-    if(scrollPos >= totalScroll) scrollPos = 0;
-    container.scrollTo({left: scrollPos, behavior:'auto'});
-    requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
-
-infiniteScroll(diseaseContainer, 0.5);
-infiniteScroll(yogaContainer, 0.5);
-
-// ===== Fake Reviews for Popularity Section =====
-const reviews = [
-  { name: "Ravi Sharma", text: "AyuCare helped me cure my acidity naturally!" },
-  { name: "Priya Nair", text: "Loved the yoga guides. Simple & effective." },
-  { name: "Aakash Verma", text: "Sleep improved with their Ayurvedic tips." },
-  { name: "Sneha Gupta", text: "Clean UI, helpful remedies! 5 stars." },
-  { name: "Manoj Patil", text: "The flu remedies really helped me." },
-  { name: "Kavya R", text: "Perfect platform for quick natural solutions." }
-];
-
-function loadRandomReview() {
-  const r = reviews[Math.floor(Math.random() * reviews.length)];
-  const container = document.getElementById("review-container");
-  const div = document.createElement("div");
-  div.innerHTML = `<strong>${r.name}</strong><p>"${r.text}"</p>`;
-  container.prepend(div);
-  if(container.childNodes.length > 5) container.removeChild(container.lastChild);
-}
-
-loadRandomReview();
-setInterval(loadRandomReview, 3000);
-</script>
+    // Reveal content as it enters the viewport; gracefully fall back on older browsers.
+    function initRevealAnimations() {
+      const revealTargets = $$('.section-heading, .about-card, .about-image, .feature-inner, .yoga-intro, .yoga-chip, .chat-copy, .chat-widget, .review-card, .photo-tile');
+      revealTargets.forEach((element, index) => {
+        if (!element.classList.contains('reveal')) element.classList.add('reveal');
+        if (index % 3 === 1) element.classList.add('from-left');
+        if (index % 3 === 2) element.classList.add('from-right');
+      });
+      if (!('IntersectionObserver' in window)) {
+        revealTargets.forEach(element => element.classList.add('is-visible'));
+        return;
+      }
+      const observer = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            currentObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+      revealTargets.forEach(element => observer.observe(element));
+    }
+    initRevealAnimations();
+    loadDataset();
+  </script>
 </body>
 </html>
